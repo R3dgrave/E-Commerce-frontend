@@ -1,6 +1,6 @@
 // environment.production.ts
 export const environment = {
     production: true,
-    apiUrl: 'https://tienda-backend-b7je.onrender.com'
+    apiUrl: 'https://e-commerce-backend-qjh7.onrender.com'
   };
   
