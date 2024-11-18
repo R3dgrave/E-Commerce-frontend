@@ -1,0 +1,74 @@
+<div class="flex flex-col px-4 md:px-8">
+  <div class="flex flex-col md:flex-row justify-between items-center">
+    <button type="button"
+      class="py-2.5 px-5 me-2 mb-4 md:mb-0 md:mr-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+      routerLink="/admin">Menu Principal</button>
+  </div>
+  <div class="flex flex-col md:flex-row justify-between items-center">
+    <h3 class="pt-2 text-center md:text-left font-bold">Administrador de productos</h3>
+    <button routerLink="/admin/products/add" type="button"
+      class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Agregar
+      nuevo producto</button>
+  </div>
+
+  <div>
+    <mat-form-field class="w-full pb-4">
+      <mat-label>Filtro</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Busqueda" #input>
+    </mat-form-field>
+
+    <div class="overflow-x-auto">
+      <table mat-table [dataSource]="dataSource" matSort class="min-w-full">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="px-2 py-1">Id</th>
+          <td mat-cell *matCellDef="let row" class="px-2 py-1"> {{row._id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="px-2 py-1">Nombre</th>
+          <td mat-cell *matCellDef="let row" class="px-2 py-1"> {{row.name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="shortDescription">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="px-2 py-1">Descripcion corta</th>
+          <td mat-cell *matCellDef="let row" class="px-2 py-1"> {{row.shortDescription}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="px-2 py-1">Descripcion</th>
+          <td mat-cell *matCellDef="let row" class="px-2 py-1"> {{row.description}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="px-2 py-1">Precio</th>
+          <td mat-cell *matCellDef="let row" class="px-2 py-1">{{ row.price | currency:'CLP':'symbol':'1.0-0' }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="discount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="px-2 py-1">Descuento Aplicado</th>
+          <td mat-cell *matCellDef="let row" class="px-2 py-1"> {{row.discount}}% </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="px-2 py-1 text-right">Acción</th>
+          <td mat-cell *matCellDef="let row" cclass="px-2 py-1">
+            <button type="button"
+              class="text-yellow-400 hover:text-white border border-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mt-2 mb-2 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900"
+              [routerLink]="'/admin/products/' +row._id ">Editar</button>
+            <button (click)="delete(row._id)" type="button"
+              class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">Eliminar</button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">No se encontraron resultados con el filtro "{{input.value}}"</td>
+        </tr>
+      </table>
+    </div>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Seleccionar pagina"></mat-paginator>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+<div class="w-full px-2 flex flex-wrap gap-4 justify-center">
+    <h4 class="text-2xl font-bold w-full text-center">Lista de deseos</h4>
+    <div class="w-full sm:w-1/2 md:w-2/5 lg:w-1/3 xl:w-1/4 p-2 flex flex-col">
+        @for (product of wishlistService.wishlists; track $index) {
+            <app-product-card [product]="product"></app-product-card>
+        }@empty {
+            <h4>No hay productos guardados en la lista de deseos</h4>
+        }
+    </div>
+</div>

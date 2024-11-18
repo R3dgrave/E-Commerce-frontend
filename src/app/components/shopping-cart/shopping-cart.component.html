@@ -1,0 +1,148 @@
+<div class="container mx-auto p-6">
+  <!-- Carrito de compras -->
+  @if(orderStep==0){
+  <h1 class="text-2xl sm:text-3xl font-bold mb-4">Carrito de compras</h1>
+  <div class="bg-white shadow-md rounded-lg p-4 md:p-6">
+    <table class="min-w-full table-auto hidden md:table">
+      <thead>
+        <tr class="bg-gray-200 text-gray-600 uppercase text-xs md:text-sm leading-normal">
+          <th class="py-2 px-4 md:py-3 md:px-6 text-left">Producto</th>
+          <th class="py-2 px-4 md:py-3 md:px-6 text-center">Cantidad</th>
+          <th class="py-2 px-4 md:py-3 md:px-6 text-center">Precio</th>
+          <th class="py-2 px-4 md:py-3 md:px-6 text-center">Descuento</th>
+          <th class="py-2 px-4 md:py-3 md:px-6 text-center">Total</th>
+          <th class="py-2 px-4 md:py-3 md:px-6 text-center">Acción</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-600 text-xs md:text-sm font-light">
+        @for (item of cartItems; track $index) {
+        <tr class="border-b border-gray-200 hover:bg-gray-100">
+          <td class="py-2 px-4 md:py-3 md:px-6 text-left">
+            <div class="flex items-center w-full md:w-1/4 gap-4">
+              <img class="w-full" *ngIf="item.product?.images?.length" [src]="item.product.images[0]" alt="Producto" />
+              <span>{{ item.product.name }}</span>
+            </div>
+          </td>
+          <td class="py-2 px-4 md:py-3 md:px-6 text-center">
+            <div class="flex items-center justify-center">
+              <span (click)="addToCart(item.product._id!, -1)"
+                class="bg-gray-200 rounded-sm p-1 md:p-2 shadow cursor-pointer mr-2 md:mr-4">-</span>
+              <span>{{ item.quantity }}</span>
+              <span (click)="addToCart(item.product._id!, 1)"
+                class="bg-gray-200 rounded-sm p-1 md:p-2 shadow cursor-pointer ml-2 md:ml-4">+</span>
+            </div>
+          </td>
+          <td class="py-2 px-4 md:py-3 md:px-6 text-center">
+            <span>{{ item.product.price| currency:'CLP':'symbol':'1.0-0' }}</span>
+          </td>
+          <td class="py-2 px-4 md:py-3 md:px-6 text-center">
+            <span>{{ item.product.discount }}%</span>
+          </td>
+          <td class="py-2 px-4 md:py-3 md:px-6 text-center">
+            <span>{{ sellingPrice(item.product ) * item.quantity | currency:'CLP':'symbol':'1.0-0' }}</span>
+          </td>
+          <td class="py-2 px-4 md:py-3 md:px-6 text-center">
+            <button (click)="removeFromCart(item.product._id!)" class="text-red-500 hover:text-red-600 text-xs md:text-sm">Remover</button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+
+    <!-- Responsive card mobile -->
+    <div class="block md:hidden">
+      @for (item of cartItems; track $index) {
+      <div class="border-b border-gray-200 hover:bg-gray-100 p-4">
+        <div class="flex items-center">
+          <img class="w-12 h-12 mr-6" [src]="item.product.images[0]" alt="product image" />
+          <div>
+            <span class="font-semibold">{{ item.product.name }}</span>
+            <div class="py-4">
+              <span class="text-gray-600 text-xs mr-4">Cantidad:</span>
+              <span (click)="addToCart(item.product._id!, -1)"
+                class="bg-gray-200 rounded-sm p-1 md:p-2 shadow cursor-pointer mr-2 md:mr-4">-</span>
+              <span class="text-gray-600 text-xs"> {{ item.quantity }} </span>
+              <span (click)="addToCart(item.product._id!, 1)"
+                class="bg-gray-200 rounded-sm p-1 md:p-2 shadow cursor-pointer ml-2 md:ml-4">+</span>
+            </div>
+            <p class="text-gray-600 text-xs pb-2">Precio: {{ item.product.price | currency:'CLP':'symbol':'1.0-0' }}</p>
+            <p class="text-gray-600 text-xs pb-2">Descuento: {{ item.product.discount }}%</p>
+            <p class="text-gray-600 text-xs">Total: {{ sellingPrice(item.product) * item.quantity | currency:'CLP':'symbol':'1.0-0' }}</p>
+            <button (click)="removeFromCart(item.product._id!)" class="text-red-500 hover:text-red-600 text-xs mt-2">Remover</button>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+
+  <!-- Resumen del pedido -->
+  <div class="mt-6 bg-white shadow-md rounded-lg p-4 md:p-6">
+    <h2 class="text-lg md:text-xl font-bold mb-4">Resumen del pedido</h2>
+    <div class="flex justify-between font-bold text-md md:text-lg">
+      <span>Total:</span>
+      <span>{{ totalAmmount | currency:'CLP':'symbol':'1.0-0' }}</span>
+    </div>
+    <button (click)="checkout()"
+      class="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300">
+      Proceder a pagar
+    </button>
+  </div>
+  }
+
+  <!-- Dirección de envío -->
+  @else if(orderStep==1){
+  <div class="grid gap-4 sm:grid-cols-1 sm:gap-6 justify-center">
+    <form [formGroup]="addressForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <h1 class="text-2xl sm:text-3xl font-bold mb-4">Dirección de envío</h1>
+      <div class="sm:col-span-2">
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección 1</label>
+        <input matInput
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+          type="text" formControlName="address1" placeholder="Tu dirección" required />
+      </div>
+      <div class="sm:col-span-2">
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección 2</label>
+        <input matInput
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+          type="text" formControlName="address2" placeholder="Tu dirección 2" />
+      </div>
+      <div class="sm:col-span-2">
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ciudad</label>
+        <input matInput
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+          type="text" formControlName="city" placeholder="Ciudad" required />
+      </div>
+      <div class="sm:col-span-2">
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Código Postal</label>
+        <input matInput
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+          type="text" formControlName="pincode" placeholder="Código Postal" required />
+      </div>
+
+      <div class="sm:col-span-2">
+        <button class="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+          [disabled]="addressForm.invalid" (click)="addAddress()">
+          Pagar
+        </button>
+      </div>
+
+    </form>
+  </div>
+  }
+
+  <!-- Selección de método de pago -->
+  @else if(orderStep==2){
+  <h1 class="text-2xl sm:text-3xl font-bold text-center mb-8">Selecciona el método de pago</h1>
+  <div class="flex flex-col items-center">
+    <mat-radio-group aria-label="Select an option" [(ngModel)]="paymentType">
+      <mat-radio-button value="cash">Efectivo</mat-radio-button>
+      <mat-radio-button value="card" [disabled]="true">Tarjeta Crédito/Débito</mat-radio-button>
+    </mat-radio-group>
+    <button (click)="completeOrder()"
+      class="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300">
+      Continuar
+    </button>
+  </div>
+  }
+</div>

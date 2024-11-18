@@ -1,0 +1,156 @@
+<section class="bg-white dark:bg-gray-900">
+  <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+    @if(id){
+    <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Actualizar producto</h2>
+    }@else{
+    <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Añadir nuevo producto</h2>
+    }
+    <form [formGroup]="productForm">
+      <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+        <div>
+          <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Categoria</label>
+          <select id="category" formControlName="categoryId"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+            @for (item of categories; track $index) {
+            <option [value]="item?._id">{{ item.name }}</option>
+            }
+          </select>
+        </div>
+
+        <div>
+          <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Marca</label>
+          <select id="category" formControlName="brandId"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+            @for (item of brands; track $index) {
+            <option [value]="item?._id">{{ item.name }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="sm:col-span-2">
+          <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre del
+            producto</label>
+          <input type="text" name="name" id="name" formControlName="name"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            placeholder="Nombre..." required />
+          <div *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched"
+            class="text-red-500 text-sm">
+            <span *ngIf="productForm.get('name')?.errors?.['required']">El nombre es obligatorio.</span>
+            <span *ngIf="productForm.get('name')?.errors?.['minlength']">El nombre debe tener al menos 2
+              caracteres.</span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Precio</label>
+          <input type="number" name="price" id="price" min="1" formControlName="price"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            placeholder="$0" required />
+          <div *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched"
+            class="text-red-500 text-sm">
+            <span *ngIf="productForm.get('price')?.errors?.['required']">El precio es obligatorio.</span>
+            <span *ngIf="productForm.get('price')?.errors?.['min']">El precio debe ser mayor a 0.</span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <label for="discount" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descuento
+            (%)</label>
+          <input type="number" name="discount" id="discount" min="1" max="100" formControlName="discount"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            placeholder="10" required />
+          <div *ngIf="productForm.get('discount')?.invalid && productForm.get('discount')?.touched"
+            class="text-red-500 text-sm">
+            <span *ngIf="productForm.get('discount')?.errors?.['required']">El descuento es obligatorio.</span>
+            <span *ngIf="productForm.get('discount')?.errors?.['min']">El descuento debe ser al menos 1%.</span>
+            <span *ngIf="productForm.get('discount')?.errors?.['max']">El descuento no puede superar el 100%.</span>
+          </div>
+        </div>
+
+        <div class="sm:col-span-2">
+          <label for="shortDescription" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripcion
+            corta</label>
+          <input type="text" name="shortDescription" id="shortDescription" formControlName="shortDescription"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            placeholder="Descripcion corta del producto...." required />
+          <div *ngIf="productForm.get('shortDescription')?.invalid && productForm.get('shortDescription')?.touched"
+            class="text-red-500 text-sm">
+            <span *ngIf="productForm.get('shortDescription')?.errors?.['required']">La descripción corta es
+              obligatoria.</span>
+            <span *ngIf="productForm.get('shortDescription')?.errors?.['minlength']">Debe tener al menos 5
+              caracteres.</span>
+          </div>
+        </div>
+
+        <div class="sm:col-span-2">
+          <label for="description"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripcion</label>
+          <textarea id="description" rows="5" formControlName="description"
+            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            placeholder="Ingresa la descripcion del producto..."></textarea>
+          <div *ngIf="productForm.get('description')?.invalid && productForm.get('description')?.touched"
+            class="text-red-500 text-sm">
+            <span *ngIf="productForm.get('description')?.errors?.['required']">La descripción es obligatoria.</span>
+            <span *ngIf="productForm.get('description')?.errors?.['minlength']">Debe tener al menos 10
+              caracteres.</span>
+          </div>
+        </div>
+
+        <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
+          <input id="bordered-checkbox-1" type="checkbox" value="" name="bordered-checkbox" formControlName="isFeatured"
+            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+          <label for="bordered-checkbox-1"
+            class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Producto Destado</label>
+        </div>
+        <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
+          <input checked id="bordered-checkbox-2" type="checkbox" value="" name="bordered-checkbox"
+            formControlName="isNewProduct"
+            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+          <label for="bordered-checkbox-2"
+            class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Producto Nuevo</label>
+        </div>
+
+        <div class="sm:col-span-2" formArrayName="images">
+          <div class="flex flex-row justify-between">
+            <div class="m-0 my-auto">
+              <label class="block w-full mb-2 text-sm font-medium text-gray-900 dark:text-white">Subir imagenes</label>
+            </div>
+            <div>
+              <button type="button" (click)="addImage()"
+                class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Añadir
+                imagen</button>
+              <button type="button" (click)="removeImage()"
+                class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Borrar
+                imagen</button>
+            </div>
+          </div>
+          <div>
+            @for( item of images.controls; track $index){
+            <label class="mt-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Imagen
+              {{
+              $index + 1 }}</label>
+            <input type="text" name="name" id="name" [formControlName]="$index"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="Url..." />
+            }
+          </div>
+        </div>
+
+        <div class="flex justify-center sm:col-span-2">
+          <button *ngIf="id"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium flex justify-center rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            [disabled]="productForm.invalid" (click)="updateProduct()">
+            Actualizar Producto
+          </button>
+
+          <button *ngIf="!id"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium flex justify-center rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            [disabled]="productForm.invalid" (click)="addProduct()">
+            Añadir Producto
+          </button>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</section>

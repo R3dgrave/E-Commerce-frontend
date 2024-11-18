@@ -1,0 +1,90 @@
+<section class="bg-white dark:bg-gray-900">
+  <div class="flex flex-col md:flex-row py-4 justify-center items-center">
+    <button type="button"
+      class="py-2.5 px-5 me-2 mb-4 md:mb-0 md:mr-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+      routerLink="/admin">Menu Principal</button>
+  </div>
+  <h2 class="text-gray-600 uppercase text-sm leading-normal text-center pt-8">Mis pedidos</h2>
+
+  @for (order of orders; track $index) {
+  <div class="py-4 px-4 mx-auto max-w-2xl lg:py-8 shadow">
+    <div class="w-full">
+      <h2 class="sm:col-span-2 mb-2 text-xs font-bold text-gray-900 dark:text-white">Datos de despacho</h2>
+      <p>Orden N°{{ order._id }}</p>
+
+      <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-900 dark:text-white">Fecha de emisión:</label>
+          <span>{{ order.date | date : 'mediumDate' }}</span>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-900 dark:text-white">Dirección 1:</label>
+          <p>{{ order.address?.address1 }}</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-900 dark:text-white">Dirección 2:</label>
+          <p>{{ order.address?.address2 }}</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-900 dark:text-white">Ciudad:</label>
+          <p>{{ order.address?.city }}</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-900 dark:text-white">Código Postal:</label>
+          <p>{{ order.address?.pincode }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla de productos -->
+    <div class="overflow-x-auto">
+      <table class="min-w-full table-auto mb-10">
+        <thead>
+          <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+            <th class="py-3 px-6 text-left">Producto</th>
+            <th class="py-3 px-6 text-center">Cantidad</th>
+            <th class="py-3 px-6 text-center">Precio</th>
+            <th class="py-3 px-6 text-center">Descuento</th>
+            <th class="py-3 px-6 text-center">Total</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-600 text-sm font-light">
+          @for (item of order.items; track $index) {
+          <tr class="border-b border-gray-200 hover:bg-gray-100">
+            <td class="py-3 px-6 text-left">
+              <div class="flex items-center">
+                <div class="mr-2">
+                  <img class="w-12 h-12 object-cover" [src]="item.product.images[0]" alt="product image" />
+                </div>
+                <span>{{ item.product.name }}</span>
+              </div>
+            </td>
+            <td class="py-3 px-6 text-center">
+              <span>{{ item.quantity }}</span>
+            </td>
+            <td class="py-3 px-6 text-center">
+              <span>{{ item.product.price }}</span>
+            </td>
+            <td class="py-3 px-6 text-center">
+              <span>{{ item.product.discount }}%</span>
+            </td>
+            <td class="py-3 px-6 text-center">
+              <span>{{ sellingPrice(item.product) * item.quantity }}</span>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Botón de estado del pedido -->
+    <div class="flex justify-center mt-4">
+      <mat-button-toggle-group [value]="order.status" name="status" (change)="statusChanged($event, order)">
+        <mat-button-toggle value="Despachada">Despachada</mat-button-toggle>
+        <mat-button-toggle value="Enviada">Enviada</mat-button-toggle>
+        <mat-button-toggle value="Entregada">Entregada</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+  </div>
+  }
+</section>

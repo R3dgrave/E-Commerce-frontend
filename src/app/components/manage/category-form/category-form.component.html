@@ -1,0 +1,43 @@
+<section class="bg-white dark:bg-gray-900">
+  <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+    <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+      {{ isEdit ? 'Actualizar categoria' : 'Añadir nueva categoria' }}
+    </h2>
+
+    <form [formGroup]="categoryForm">
+      <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+        <div class="sm:col-span-2">
+          <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre de la
+            Categoria</label>
+          <input type="text" formControlName="name"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            placeholder="Nombre..." required />
+
+          <!-- Mensajes de error -->
+          <div *ngIf="categoryForm.controls['name'].invalid && categoryForm.controls['name'].touched">
+            <small *ngIf="categoryForm.controls['name'].hasError('required')" class="text-red-500">El nombre es
+              obligatorio.</small>
+            <small *ngIf="categoryForm.controls['name'].hasError('minlength')" class="text-red-500">El nombre debe tener
+              al menos 3 caracteres.</small>
+            <small *ngIf="categoryForm.controls['name'].hasError('pattern')" class="text-red-500">El nombre solo puede
+              contener letras, números y espacios.</small>
+          </div>
+        </div>
+
+        <div class="flex justify-center sm:col-span-2">
+          <button *ngIf="isEdit"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium flex justify-center rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            [disabled]="categoryForm.invalid" (click)="update()">
+            Actualizar Categoria
+          </button>
+
+          <button *ngIf="!isEdit"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium flex justify-center rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            [disabled]="categoryForm.invalid" (click)="add()">
+            Añadir Categoria
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>

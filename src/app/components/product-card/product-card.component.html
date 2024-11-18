@@ -1,0 +1,29 @@
+<div class="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 flex flex-col justify-between h-full cursor-pointer">
+  <!-- Imagen del producto -->
+  <div class="relative w-full h-48 md:h-56 lg:h-64 xl:h-72 2xl:h-80">
+    <img [routerLink]="'/product/' + product._id" [src]="product.images[0]" class="w-full h-full object-cover" alt="Product Image">
+    <!-- Botón para añadir/quitar de la lista de deseos -->
+    <button class="absolute top-2 right-2 p-2" (click)="addToWishList(product)">
+      <mat-icon *ngIf="isInWishlist(product)" class="text-red-500">favorite</mat-icon>
+      <mat-icon *ngIf="!isInWishlist(product)" class="text-red-500">favorite_border</mat-icon>
+    </button>
+  </div>
+
+  <!-- Contenido del producto -->
+  <div [routerLink]="'/product/' + product._id" class="p-4 flex-grow">
+    <p class="text-base font-bold truncate">{{ product.name }}</p>
+    <p class="text-gray-600 text-sm line-clamp-1">{{ product.shortDescription }}</p>
+  </div>
+
+  <!-- Precio y botón de compra -->
+  <div class="p-4 flex items-center justify-between">
+    <span class="text-sm  font-bold text-green-600">{{ sellingPrice | currency }}</span>
+    <!-- Botón de añadir/quitar del carrito -->
+    <button (click)="addToCart(product)" *ngIf="isProductInCart(product._id!)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+      <mat-icon>remove_shopping_cart</mat-icon>
+    </button>
+    <button (click)="addToCart(product)" *ngIf="!isProductInCart(product._id!)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+      <mat-icon>add_shopping_cart</mat-icon>
+    </button>
+  </div>
+</div>

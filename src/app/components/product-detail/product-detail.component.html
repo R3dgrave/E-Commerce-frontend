@@ -1,0 +1,104 @@
+@if (product) {
+<div class="container mx-auto mt-10 p-6 bg-white shadow-md rounded-lg mb-8">
+  <div class="flex flex-col md:flex-row">
+    <div class="lg:w-6/12 w-full">
+      <div class="flex flex-col">
+        <div id="product-carousel" class="relative w-full" data-carousel="static">
+          <div class="relative h-80 sm:h-64 md:h-96 lg:h-96 xl:h-[28rem] 2xl:h-[32rem] overflow-hidden rounded-lg">
+            <div *ngFor="let url of product.images; let i = index"
+              class="absolute inset-0 w-full h-full transition-opacity duration-500"
+              [ngClass]="{ 'opacity-100': i === currentSlide, 'opacity-0': i !== currentSlide }">
+              <img [src]="url" alt="Imagen de producto {{ i + 1 }}" class="w-full h-full object-cover">
+            </div>
+          </div>
+          <button *ngIf="product.images.length > 1" type="button"
+            class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full"
+            (click)="previousSlide()">
+            &larr;
+          </button>
+          <button *ngIf="product.images.length > 1" type="button"
+            class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full"
+            (click)="nextSlide()">
+            &rarr;
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:w-6/12 w-full p-4">
+      <h2 class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-gray-800">
+        {{ product.name }}
+      </h2>
+
+      <div class="flex flex-col sm:flex-row items-start mt-4 space-y-2 sm:space-y-0 sm:space-x-4">
+        <p class="text-sm sm:text-base md:text-lg text-gray-700">Descripción: {{ product.shortDescription }}</p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-start justify-between mt-4 space-y-2 sm:space-y-0 sm:space-x-4">
+        <span *ngIf="product.discount > 1"
+          class="rounded bg-primary-100 py-1 text-xs sm:text-sm font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-300">
+          Aprovecha {{product.discount}}% de descuento
+        </span>
+        <div>
+          <button (click)="addToWishList(product)" class="text-sm sm:text-base">
+            <mat-icon *ngIf="isInWishlist(product)" class="text-red-500">favorite</mat-icon>
+            <mat-icon *ngIf="!isInWishlist(product)" class="text-red-500">favorite_border</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row justify-between items-center mt-6 space-y-4 sm:space-y-0 sm:space-x-6">
+        <div class="flex flex-row items-start">
+          <label for="quantity" class="block text-gray-700 text-sm sm:text-base mx-0 my-auto pr-2">Cantidad:</label>
+          <input type="number" id="quantity" name="quantity" min="1" value="1"
+            class="w-16 border border-gray-300 rounded-md p-2 text-center text-sm sm:text-base" />
+        </div>
+      </div>
+
+      <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-lg sm:text-xl md:text-2xl font-extrabold text-gray-900 dark:text-white">
+          {{sellingPrice | currency:'CLP':'symbol':'1.0-0'}}
+        </p>
+        <button (click)="addToCart(product)" type="button"
+          class="text-white flex justify-center items-center  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+          <mat-icon class="mr-2" *ngIf="isProductInCart(product._id!)">remove_shopping_cart</mat-icon>
+          <mat-icon class="mr-2" *ngIf="!isProductInCart(product._id!)">add_shopping_cart</mat-icon>
+          {{ isProductInCart(product._id!) ? 'Remover del carrito' : 'Añadir al carrito' }}</button>
+      </div>
+    </div>
+  </div>
+
+  @if(similarProducts.length) {
+  <div class="w-full p-4 mt-10">
+    <h4 class="text-xl md:text-2xl font-bold w-full">Productos Similares</h4>
+    <div class="flex flex-col md:flex-row gap-4">
+      @for (product of similarProducts; track $index) {
+      <app-product-card [product]="product" class="w-full md:w-1/4"></app-product-card>
+      }
+    </div>
+  </div>
+  }
+
+  <div class="mt-10">
+    <h3 class="text-xl md:text-2xl font-semibold text-gray-800">Reseñas del Producto</h3>
+    <div class="mt-4 space-y-6">
+      <div class="p-4 border rounded-md shadow-sm bg-gray-50">
+        <p class="text-gray-900 font-semibold">Usuario 1</p>
+        <p class="text-gray-600 text-sm">Hace 2 días</p>
+        <p class="mt-2 text-gray-700">
+          El producto es excelente, cumple con todas mis expectativas y llegó en buen estado.
+        </p>
+      </div>
+      <div class="p-4 border rounded-md shadow-sm bg-gray-50">
+        <p class="text-gray-900 font-semibold">Usuario 2</p>
+        <p class="text-gray-600 text-sm">Hace 5 días</p>
+        <p class="mt-2 text-gray-700">
+          Buena calidad pero el envío demoró más de lo esperado.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+}@else {
+<h2>Cargando...</h2>
+}
