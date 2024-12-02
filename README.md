@@ -70,6 +70,7 @@ Crea un archivo llamado .env en la raíz del proyecto y define la siguiente vari
 2. **Ejecutar el proyecto localmente**:
    `npm start`
    Abre tu navegador y accede a: http://localhost:4200/
+   usuario prueba admin: admin@correo1.com / 123456
  
 ---
 ## 🛒 Funcionalidades principales
