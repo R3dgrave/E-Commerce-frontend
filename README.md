@@ -5,7 +5,8 @@
 ![Deployment](https://img.shields.io/badge/Deployed%20on-Vercel-03C988)
 
 🌐 [Ver proyecto en línea](https://e-commerce-frontend-teal-one.vercel.app/)
-
+usuario admin: admin@correo1.com
+contraseña admin: 123456
 ---
 
 ## 📖 Descripción
